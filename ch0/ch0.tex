@@ -1,0 +1,165 @@
+\documentclass[11pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,mathtools}
+\usepackage{xcolor}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{solution}[1][Solution]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep]}{\end{trivlist}} 
+
+\DeclareMathOperator*{\E}{\mathbb{E}}
+\DeclareMathOperator*{\LVert}{\left{||}}
+\newcommand*{\annot}[1]{\tag*{\footnotesize{(#1)}}}
+
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter\norm{\lVert}{\rVert_2^2}%
+
+% Swap the definition of \abs* and \norm*, so that \abs
+% and \norm resizes the size of the brackets, and the 
+% starred version does not.
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+%
+\let\oldnorm\norm
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+\makeatother
+
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Chapter 0 Appetizer: using probability to cover geometric sets}
+\author{Desh Raj} 
+ 
+\maketitle
+ 
+\begin{exercise}{0.1.3}
+\end{exercise}
+ 
+\begin{solution}
+\textbf{Part 1}
+
+We will first show that for independent random variables, variance of the sum is equal to sum of the variances.
+
+\begin{equation}
+\label{eqn:1}
+\text{var}\left( \sum_{i=1}^n X_i \right) = \E \left[ \sum_{i=1}^n X_i \right] ^2 - \left[ \E \sum_{i=1}^n X_i \right]^2 
+\end{equation}
+
+Now consider each of the two terms on the RHS of this equation.
+\begin{equation*}
+\E \left[ \sum_{i=1}^n X_i \right] ^2 = \E \left( \sum_{i=1}^n \sum_{j=1}^n X_i X_j \right) 
+	=   \sum_{i=1}^n \sum_{j=1}^n \left( \E X_i X_j \right)
+\end{equation*}
+
+Similarly,
+\begin{equation*}
+\left[ \E \sum_{i=1}^n X_i \right]^2 = \left[ \sum_{i=1}^n \E X_i \right]^2 
+	= \sum_{i=1}^n \sum_{j=1}^n \E X_i \E X_j  
+\end{equation*}
+
+Using these in \ref{eqn:1}, we get
+\begin{equation*}
+\text{var}\left( \sum_{i=1}^n X_i \right) = \sum_{i=1}^n \sum_{j=1}^n \left( \E X_i X_j - \E X_i \E X_j \right) =  \sum_{i=1}^n \sum_{j=1}^n \text{cov} (X_i, X_j)
+\end{equation*}
+
+If the variables are independent, we can write
+\begin{equation*}
+\text{var}\left( \sum_{i=1}^n X_i \right) = \sum_{i=1}^n \sum_{j=1}^n \text{cov} (X_i, X_j)
+	= \sum_{i=1}^n \text{cov} (X_i, X_i) = \sum_{i=1}^n \text{var}(X_i)
+\end{equation*}
+
+Now consider the zero-mean independent random variables given. From the above proof, we have
+\begin{align*}
+\text{var}\left( \sum_{j=1}^k Z_j \right) &= \sum_{j=1}^k \text{var}\left( Z_j \right) \\
+\E \norm{\sum_{j=1}^k Z_j} - \norm{\E \sum_{j=1}^k Z_j} &= \sum_{j=1}^k \E \norm{ Z_j} - \sum_{j=1}^k \norm{\E Z_j } \annot{From the definition of variance}\\
+\E \norm{\sum_{j=1}^k Z_j} - \norm{ \sum_{j=1}^k \E Z_j} &= \sum_{j=1}^k \E \norm{ Z_j} - \sum_{j=1}^k \norm{ \E Z_j } \annot{Expectation of a sum equals sum of the expectations} \\
+\E \norm{ \sum_{j=1}^k Z_j } &= \sum_{j=1}^k \E \norm{ Z_j } \annot{$\E Z_j = 0$}\\
+\end{align*}
+
+This is the required result in Part 1.\\ \\
+
+\textbf{Part 2}
+
+This is derived easily from the linearity of expectations.
+
+\begin{align*}
+\E \norm{Z - \E Z} &= \E \left( \norm{Z} -2Z\E Z + \norm{\E Z} \right) \\
+	&= \E\norm{Z} -2\E Z \E Z + \norm{\E Z} \annot{Expectation of an expectation is the same} \\
+	&= \E\norm{Z} - 2\norm{\E Z} + \norm{\E Z} \annot{Product of same expected values} \\
+	&= \E\norm{Z} - \norm{\E Z} \\
+\end{align*}
+which is the required result.
+\end{solution}
+
+\begin{exercise}{0.1.5}
+\end{exercise}
+
+\begin{solution}
+We will first show the lower bound. We have
+
+\begin{align*}
+& ~~~~ m \leq n \\
+&\Rightarrow mk \leq nk \annot{for some $k > 0$}\\
+&\Rightarrow mn - mk \geq mn - nk \\
+&\Rightarrow \frac{n - k}{n} \geq \frac{m - k}{m} \annot{Dividing both sides by mn}\\
+&\Rightarrow \frac{n}{m} \leq \frac{n - k}{m - k} \\
+&\Rightarrow \left( \frac{n}{m} \right)^m \leq \frac{n-1}{m-1} \ldots \frac{n-m+1}{1} = {n\choose m}\\ 
+\end{align*}
+
+To show the upper bound, observe that
+\begin{equation}
+{n \choose m} = \frac{n!}{m!(n-m)!} = \frac{n(n-1)\ldots(n-m+1)}{m!} \leq \frac{n^m}{m!}
+\label{eqn:2}
+\end{equation}
+
+Consider the Taylor expansion of $e^m$:
+\begin{equation*}
+e^m = \sum_{k=0}^\infty \frac{m^k}{k!}
+\end{equation*}
+
+If we take only the $m^{th}$ term on the RHS, we get
+\begin{equation}
+e^m > \frac{m^m}{m!} \Rightarrow \frac{1}{m!} < \left( \frac{e}{m} \right)^m.
+\label{eqn:3}
+\end{equation}
+
+Using \ref{eqn:3} in \ref{eqn:2}, we obtain the upper bound, i.e.,
+\begin{equation*}
+{n \choose m} < \left( \frac{en}{m} \right)^m.
+\end{equation*}
+
+\end{solution}
+
+\begin{exercise}{0.1.6}(Improved covering)
+\end{exercise}
+
+\begin{solution}
+This proof follows the proof of Corollary 0.1.4 very closely, and differs only at the final step. 
+
+Given that $P$ is a polytrope with $N$ vertices. Let centers of the required balls be defined as
+\begin{equation*}
+\mathcal{N} := \left( \frac{1}{k}\sum_{j=1}^k x_j : x_j \text{ are the vertices of } P \right),
+\end{equation*}
+where $k = \frac{1}{\epsilon^2}$.
+
+For any point $x\in P$, $x$ is within distance $\frac{1}{\sqrt{k}} \leq \epsilon$ from some point in $\mathcal{N}$. Now we just have to show the required bound on $\lvert \mathcal{N} \rvert$. Essentially, this quantity is equal to the number of ways of choosing $k$ elements with replacement from a set of $N$ elements. 
+
+\begin{align*}
+|\mathcal{N}| &= {N+k-1 \choose k} 
+			&\leq \left( \frac{e(N+k-1}{k} \right)^k \annot{Result from previous problem}\\
+			&= \left[ e(1-\epsilon^2) + e\epsilon^2 N \right]^{\frac{1}{\epsilon^2}} \annot{Substituting value of k} \\
+			&<  \left[ e + e\epsilon^2 N \right]^{\frac{1}{\epsilon^2}},
+\end{align*}
+which is the desired result.
+
+\end{solution}
+\end{document}
