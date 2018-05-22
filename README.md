@@ -7,5 +7,5 @@ I will keep adding the solutions as I progress through the book, and even then I
 # Table of Contents
 
 1. [Chapter 0 Appetizer](ch0/ch0.pdf)
-<!-- 2. [Chapter 1 Preliminaries on random variables] -->
+2. [Chapter 1 Preliminaries on random variables](ch1/ch1.pdf)
 <!-- 3. [Chapter 2 Concentration of sums of independent random variables] -->
