@@ -1,0 +1,202 @@
+\documentclass[11pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,mathtools,bbm}
+\usepackage{xcolor}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{solution}[1][Solution]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep]}{\end{trivlist}} 
+
+\DeclareMathOperator*{\E}{\mathbb{E}}
+\DeclareMathOperator*{\LVert}{\left{||}}
+\newcommand*{\annot}[1]{\tag*{\footnotesize{(#1)}}}
+
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter\norm{\lVert}{\rVert^2}%
+
+% Swap the definition of \abs* and \norm*, so that \abs
+% and \norm resizes the size of the brackets, and the 
+% starred version does not.
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+%
+\let\oldnorm\norm
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+\makeatother
+
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Chapter 2 Concentration of sums of independent random variables}
+\author{Desh Raj} 
+ 
+\maketitle
+ 
+\begin{exercise}{2.1.4}
+\end{exercise}
+ 
+\begin{solution}
+Given, $g \sim \mathcal{N}(0,1)$. On differentiating, we get $g^{\prime}(t) = -t g(t)$. 
+
+\begin{align*}
+\E X^2 \mathbbm{1}_{X>t} &= \int_t^{\infty} x^2 g(x) dx \\
+						&= \int_t^{\infty} x (xg(x)) dx \\
+						&= x\int_t^{\infty} x g(x) dx + \int_t^{\infty} g(x)dx  \annot{Integration by parts}\\
+						&= -xg(x)\bigg]_t^{\infty} + \mathbb{P}(X>t) \\
+						&= tg(t) + \mathbb{P}(X>t) \annot{Taking limit of the first term}
+\end{align*}
+This is the desired result.
+\end{solution}
+
+\begin{exercise}{2.2.3}Bounding the hyperbolic cosine
+\end{exercise}
+
+\begin{solution}
+We have,
+\begin{align*}
+\text{cosh}(x) &= \frac{e^x + e^{-x}}{2} \\
+			&= \frac{1}{2}\left( \sum_{i=0}^{\infty}\frac{x^i}{i!} + \sum_{i=0}^{\infty}\frac{(-x)^i}{i!} \right) \annot{Using Taylor series expansion} \\
+			&= \sum_{i=0}^{\infty}\frac{x^{2i}}{(2i)!}
+			\geq \sum_{i=0}^{\infty}\frac{x^{2i}}{2^i i!} \annot{Consider the denominator of the $i^{th}$ term. Each product term in $(2i)!$ is strictly greater than that in $2^i i!$.}\\
+			&= \exp\left(\frac{x^2}{2}\right) \annot{Again using Taylor series expansion}.
+\end{align*}
+\end{solution}
+
+\begin{exercise}{2.2.7}
+\end{exercise}
+
+\begin{solution}
+Given, $X_1,\ldots,X_N$ are independent random variables such that $X_i \in [m_i,M_i]$. Let $S_N = X_1 + \ldots + X_N$. Then, for $t > 0$, we have
+
+\begin{align*}
+\mathbb{P}\{S_N - \E S_N \geq t \} &= \mathbb{P}\{ e^{s(S_N - \E S_N)} \geq e^{st} \} \annot{For some $s>0$} \\
+			&\leq \frac{\E e^{s(S_N - \E S_N)}}{e^{st}} \annot{Using Markov's inequality} \\
+			&= e^{-st}\prod_{i=1}^N \E\left[ e^{s(X_i - \E X_i)} \right] \\
+			&\leq e^{-st}\prod_{i=1}^N \exp \left( \frac{s^2(M_i-m_i)^2}{8} \right)  \annot{Using Hoeffding's lemma, since $\E (X_i - \E X_i) = 0$}\\	
+			&= \exp \left( -st + \frac{s^2}{8}\sum_{i=1}^N (M_i - m_i)^2 \right).		
+\end{align*}
+
+Let $g(s) = \exp \left( -st + \frac{s^2}{8}\sum_{i=1}^N (M_i - m_i)^2 \right)$. $g(s)$ achieves its minimum at $s = \frac{4t}{\sum_{i=1}^N (M_i - m_i)^2}$. Substituting this value in the inequality, we get
+\begin{equation*}
+\mathbb{P}\{ S_N - \E S_N \geq t \} \leq \exp \left(- \frac{2t^2}{\sum_{i=1}^N (M_i - m_i)^2} \right).
+\end{equation*}
+\end{solution}
+
+\begin{exercise}{2.2.8}
+\end{exercise}
+
+\begin{solution}
+Let $X_i$ denote the Bernoulli random variable indicating that the answer is wrong in the $i^{th}$ turn. Then $\E X_i = \frac{1}{2} - \delta$, and $X_i \in [0,1]$. We have to bound the probability that the final answer is wrong with probability $\epsilon$, i.e., $\mathcal{P}$(majority of decisions are wrong) $\leq \epsilon$. From Hoeffding's inequality, we have
+
+\begin{align*}
+& \mathcal{P}\left( \sum_{i=1}^N \left( X_i - \E X_i \right) \geq t \right) \leq \exp \left( \frac{-2t^2}{\sum_{i=1}^N (M_i - m_i)^2} \right) \\
+\Rightarrow & \mathcal{P}\left( \sum_{i=1}^N \left( X_i - \frac{1}{2} + \delta \right) \geq t \right) \leq \exp \left( \frac{-2t^2}{N} \right) \annot{Since $M_i = 1$ and $m_i = 0$} \\
+\end{align*}
+
+To get a wrong answer finally, we require that at least half of all answers must be wrong, i.e. 
+\begin{align*}
+& \sum_{i=1}^N X_i \geq \frac{N}{2} \\
+\Rightarrow & \sum_{i=1}^N \left( X_i - \frac{1}{2} + \delta \right) \geq \delta N \\ 
+\end{align*}
+
+Plugging $t = \delta N$ in earlier inequality, we get
+\begin{align*}
+& \mathcal{P}\left( \sum_{i=1}^N \left( X_i - \frac{1}{2} + \delta \right) \geq \delta N \right) \leq \exp \left( -2N \delta^2 \right)\\
+\end{align*}
+
+For this probbility to be bounded by $\epsilon$, we require that
+\begin{align*}
+& \exp(-2 N \delta^2) \leq \epsilon \\
+\Rightarrow & -2 N \delta^2 \leq \log (\epsilon) \annot{Taking log both sides} \\
+\Rightarrow & N \geq \frac{\log(\epsilon^{-1})}{2\delta^2}.\\
+\end{align*}
+\end{solution}
+
+\begin{exercise}{2.2.9}
+\end{exercise}
+
+\begin{solution}
+\textbf{Part 1}
+
+We want to bound the probability that the sample mean deviates from the true mean by a quantity greater than $\epsilon$. Using Chebyshev's inequality, we have
+\begin{equation}
+\mathcal{P}\left( \lVert \frac{1}{N}\sum_{i=1}^N X_i - \mu \rVert \geq \epsilon \right) \leq \frac{\text{var}\left( \frac{1}{N}\sum_{i=1}^N X_i \right)}{\epsilon^2}
+\label{eqn:1}
+\end{equation}
+
+Since the samples are drawn i.i.d, we have
+\begin{align*}
+& \text{var}(X_1 + \ldots + X_N) = \text{var}(X_1) + \ldots + \text{var}(X_N) \\
+\Rightarrow & \text{var}(X_1 + \ldots + X_N) = N\sigma^2 \annot{Since var($X_i$)=$\sigma^2$} \\
+\Rightarrow & \frac{1}{N^2}\text{var}(X_1 + \ldots + X_N) = \frac{\sigma^2}{N} \annot{Dividing both sides by $\sigma^2$} \\
+\Rightarrow \text{var}\left( \frac{1}{N}\sum_{i=1}^N X_i \right) = \frac{\sigma^2}{N} \\
+\end{align*}
+
+Plugging this value in \ref{eqn:1}, we get
+
+\begin{equation*}
+\mathcal{P}\left( \lVert \frac{1}{N}\sum_{i=1}^N X_i - \mu \rVert \geq \epsilon \right) \leq \frac{\sigma^2}{N\epsilon^2}
+\end{equation*}
+
+We want that an $\epsilon$-accurate estimate should be computed with probability at least 3/4, i.e., the error probability should be at most 1/4. Using this bound, we get $\frac{\sigma^2}{N\epsilon^2} \leq \frac{1}{4}$, which implies $N = \mathcal{O}(\frac{\sigma^2}{\epsilon^2})$.
+
+\textbf{Part 2}
+
+Using Theorem 2.2.6 with $X_i \in [-\sigma,\sigma]$, we get
+\begin{align*}
+\mathcal{P}\left( \frac{1}{N}\sum_{i=1}^N X_i - \mu \geq \epsilon \right) &= \mathcal{P}\left( \sum_{i=1}^N (X_i - \mu) \geq N\epsilon \right) \annot{Multiplying both sides by $N$}\\
+	&\leq \exp \left( -\frac{2N^2\epsilon^2}{\sum_{i=1}^N(2\sigma)^2} \right) \annot{From Theorem 2.2.6} \\
+	&= \exp \left( -\frac{2N^2\epsilon^2}{4N\sigma^2} \right) \\
+	&= \exp \left( -\frac{N\epsilon^2}{2\sigma^2} \right) \\
+\end{align*}
+
+We want that an $\epsilon$-accurate estimate should be computed with probability at least $1-\delta$, i.e., the error probability should be at most $\delta$. This means that
+\begin{align*}
+&\exp \left( -\frac{N\epsilon^2}{2\sigma^2} \right) \leq \delta \\
+\Rightarrow & -\frac{N\epsilon^2}{2\sigma^2} \leq \log (\delta) \annot{Taking log both sides}\\
+\Rightarrow & N = \mathcal{O}(\log(\delta^{-1})\frac{\sigma^2}{\epsilon^2}),
+\end{align*}
+which is the desired result.
+\end{solution}
+
+\begin{exercise}{2.2.10}
+\end{exercise}
+
+\begin{solution}
+\textbf{Part 1}
+
+Let $f_{X_i}$ denote the probability density function. Since $X_i$ is non-negative, it's MGF is given as
+
+\begin{align*}
+M_{X_i}(-t) &= \int_{0}^{\infty} e^{-tx}f_{X_i}(x) dx \\
+\end{align*}
+
+Since $e^{-tx} \geq 0$, $e^{-tx}f_{X_i} \leq e^{-tx}\text{max}\lVert f_{X_i}\rVert$ = $e^{-tx}$ (since $\text{max}\lVert f_{X_i}\rVert = 1$). Using this in above equation, we get
+
+\begin{align*}
+M_{X_i}(-t) &\leq \int_{0}^{\infty} e^{-tx} dx = \frac{1}{t}\\
+\end{align*}
+
+\textbf{Part 2}
+
+We have
+\begin{align*}
+\mathcal{P}\left( \sum_{i=1}^N X_i \leq \epsilon N \right) &= \mathcal{P}\left( \sum_{i=1}^N -X_i \geq -\epsilon N \right) \\
+	&=  \mathcal{P}\left( \sum_{i=1}^N -\frac{X_i}{\epsilon} \geq -N \right) \\
+	&= \mathcal{P}\left( \exp(\sum_{i=1}^N -\frac{X_i}{\epsilon} \geq \exp(-N) \right) \annot{Since exp is monotonously increasing}\\
+	&\leq e^N \E \exp \left( \sum_{i=1}^N -\frac{X_i}{\epsilon} \right) \annot{Using Markov inequality}\\
+	&= e^n \prod_{i=1}^N \E \exp \left( -\frac{X_i}{\epsilon} \right) \\
+	&\leq e^N \prod_{i=1}^N \epsilon \annot{Using result in part 1} \\
+	&= (e\epsilon)^N.
+\end{align*}
+\end{solution}
+\end{document}
