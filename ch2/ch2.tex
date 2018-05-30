@@ -199,4 +199,150 @@ We have
 	&= (e\epsilon)^N.
 \end{align*}
 \end{solution}
+
+\begin{exercise}{2.3.2}
+\end{exercise}
+
+\begin{solution}
+Since $t<\mu$, so the function $f(x) = \left(\frac{t}{\mu}\right)^x$ is monotonically decreasing. So we can write
+
+\begin{align*}
+\mathcal{P}( S_N \leq t ) &= \mathcal{P}\left( \left( \frac{t}{\mu} \right)^{S_N} \geq \left( \frac{t}{\mu} \right)^t \right) \\
+	&\leq \frac{\E \left( \frac{t}{\mu} \right)^{S_N}}{\left( \frac{t}{\mu} \right)^t} \annot{By Markov's inequality} \\
+\end{align*}
+
+We have
+\begin{align*}
+\E \alpha^{S_N} = \E \alpha^{\sum_{i=1}^N X_i} = \E \prod_{i=1}^N \alpha^{X_i} \\
+				&= \prod_{i=1}^N \left[ p_i \alpha^1 + (1-p_i)\alpha^0 \right] \annot{Since $X_i$ can only take values 1 and 0 with probability $p_i$ and $1-p_i$} \\
+				&= \prod_{i=1}^N (1 + (\alpha - 1)p_i) \\
+				&\leq \prod_{i=1}^N \exp ((\alpha - 1)p_i) \annot{Using $1+x \leq e^x$} \\
+				&= \exp(\sum_{i=1}^N ((\alpha - 1)p_i)) \\
+				&= \exp[(\alpha - 1)\mu] \\
+\end{align*}
+
+Using this inequality in above, we get
+\begin{align*}
+\mathcal{P}( S_N \leq t ) &\leq \exp(t-\mu)\left( \frac{\mu}{t}\right)^t \\
+				&= e^{-\mu}\left(\frac{e\mu}{t} \right)^t,
+\end{align*}
+which is the desired result.
+\end{solution}
+
+\begin{exercise}{2.3.3}
+\end{exercise}
+
+\begin{solution}
+Since $X \sim \text{Pois}(\lambda)$, by Poisson limit theorem, we can say that $X$ is the sum of $N$ Bernoulli random variables $X_1, \ldots, X_N$, for some large $N$, where $\E X_i = \lambda$. As such, we can use the Chernoff concentration bound for the sum of Bernoulli random variables to bound $X$, hence giving the desired result.
+\end{solution}
+
+\begin{exercise}{2.3.5}
+\end{exercise}
+
+\begin{solution}
+First, using $t=(1+\delta)\mu$ in Chernoff bounds for upper tails, we get
+\begin{equation}
+\mathcal{P}\{ X-\mu \geq \delta\mu \} \leq e^{-\mu}\left( \frac{e}{1+\delta} \right)^{(1+\delta)\mu}.
+\label{eqn:2}
+\end{equation}
+Now, using $t=(1-\delta)\mu$ in Chernoff bounds for lower tails (proved in previous problem), we get
+\begin{equation}
+\mathcal{P}\{ X-\mu \leq -\delta\mu \} \leq e^{-\mu}\left( \frac{e}{1-\delta} \right)^{(1-\delta)\mu}.
+\label{eqn:3}
+\end{equation}
+
+Adding \ref{eqn:2} and \ref{eqn:3}, we get
+\begin{align*}
+\mathcal{P}\{ \lVert X-\mu \rVert \geq \delta\mu \} &\leq e^{-\mu}\left[ \left( \frac{e}{1+\delta} \right)^{(1+\delta)\mu} + \left( \frac{e}{1-\delta} \right)^{(1-\delta)\mu}\right] \\
+\end{align*}
+
+We can bound the terms inside the bracket on the RHS as follows.
+\begin{align*}
+\left( \frac{e}{1+\delta} \right)^{(1+\delta)\mu} &= \exp \left[ (1+\delta)\mu \log \left( \frac{e}{1+\delta} \right) \right] \\ 
+	&= \exp \left[ \mu(1+\delta)(1 - \log(1+\delta)) \right] \\
+	&\leq \exp \left[ \mu(1+\delta)(1 - \frac{\delta}{1+\delta/2}) \right] \annot{Since $\log(1+x) \geq \frac{x}{1+x/2}$}\\
+	&= \exp \left[ \mu(1+\delta)\frac{1 - \frac{\delta}{2}}{1 + \frac{\delta}{2}} \right] \\
+	&= \exp \left[ \mu\left(1 - \frac{\delta^2}{2+\delta} \right) \right] \\
+	&\leq  \exp \left[ \mu\left(1 - \frac{\delta^2}{3} \right) \right] \annot{Since $2+\delta \leq 3$}\\
+\end{align*}
+and
+\begin{align*}
+\left( \frac{e}{1-\delta} \right)^{(1-\delta)\mu} &= \exp \left[ (1-\delta)\mu \log \left( \frac{e}{1-\delta} \right) \right] \\ 
+	&= \exp \left[ \mu(1-\delta)(1 - \log(1-\delta)) \right] \\
+	&\leq \exp \left( \mu(1-\delta)(1 - \frac{-\delta}{\sqrt{1-\delta}}) \right] \annot{Since $\log(1-x) \geq \frac{-x}{\sqrt{1-x}}$}\\
+	&= \exp \left[ \mu (1 - \delta + \delta\sqrt{1-\delta}) \right] \\
+	&\leq \exp \left[ \mu\left(1 - \frac{\delta^2}{3} \right) \right] \annot{Since $\sqrt{1-\delta}\leq 1- \frac{\delta}{2}$}\\
+	\end{align*}
+
+Using these bounds, we get
+\begin{align*}
+\mathcal{P}\{ \lVert X-\mu \rVert \geq \delta\mu \} &\leq 2\exp\left[-\mu\left(1 - \frac{\delta^2}{3} \right)\right] \\
+	&\leq 2e^{-c\mu \delta^2}.
+\end{align*}
+
+\end{solution}
+
+\begin{exercise}{2.3.6}
+\end{exercise}
+
+\begin{solution}
+Since $X \sim \text{Pois}(\lambda)$, by Poisson limit theorem, we can say that $X$ is the sum of $N$ Bernoulli random variables $X_1, \ldots, X_N$, for some large $N$, where $\E X_i = \lambda$. Using the result in Exercise 2.3.5, we get
+\begin{equation}
+\mathcal{P}\{ \lVert X - \lambda \rVert \geq \delta\lambda \} \leq 2\exp(-c\lambda\delta^2).
+\label{eqn:4}
+\end{equation}
+
+Now substituting $t=\delta \lambda$ in \ref{eqn:4}, we get the desired result.
+\end{solution}
+
+\begin{exercise}{2.3.8}
+\end{exercise}
+
+\begin{solution}
+We will first show that the sum of independent Poisson distributions is a Poisson distribution. Let $X$ and $Y$ be Poisson distributions with means $\lambda_1$ and $\lambda_2$, respectively. Their MGFs are given as $M_X(s) = e^{-\lambda_1(1-s)}$ and $M_Y(s) = e^{-\lambda_2(1-s)}$. Then, we have
+\begin{equation*}
+M_{X+Y}(s) = M_X(s)M_Y(s) = e^{-(\lambda_1 + \lambda_2)(1-s)}.
+\end{equation*}
+Hence, $X+Y \sim \text{Pois}(\lambda_1 + \lambda_2)$. 
+
+It is given that $X \sim \text{Pois}(\lambda)$. Therefore, $X$ can be considered as a sum of $\lambda$ Poisson distributions with mean $1$, using the above result. Now consider the distribution $Z = \frac{X - \lambda}{\sqrt{\lambda}}$. We can directly apply the Central Limit Theorem to $Z$ to obtain the desired result, since $\E X = \lambda$ and $\text{var}(X) = \lambda$.  
+\end{solution}
+
+\begin{exercise}{2.4.2}
+\end{exercise}
+
+\begin{solution}
+Consider a fixed vertex $i$. Using Markov inequality, we can bound the probability that its degree $d_i$ is larger than $\mathcal{O}(\log n)$, as
+\begin{equation*}
+\mathcal{P}\{ d_i \geq \mathcal{O}(\log n) \} \leq \frac{\E d_i}{\mathcal{O}(\log n)} = c \\
+\end{equation*}
+
+We can now use the union bound to bound the probability that such a vertex exists as follows
+\begin{equation*}
+\mathcal{P}\{\exists i : d_i \geq \mathcal{O}(\log n) \} = \sum_{i=1}^n\mathcal{P}\{d_i \geq \mathcal{O}(\log n) \}  \leq cn  \\
+\end{equation*}
+
+We can choose a constant $c$ such that this probability is very low, and therefore, the probability of its counterpart is very high.
+\end{solution}
+
+\begin{exercise}{2.4.3}
+\end{exercise}
+
+\begin{solution}
+Similar to the previous exercise, we can show that if the expected degree is $d = \mathcal{O}(1)$, then with a high probability, all vertices of $G$ have degrees $\mathcal{O}(1)$. Furthermore, we know from asymptotic notations that $\mathcal{O}(1) \leq \mathcal{O}\left(\frac{\log n}{\log \log n}\right)$. Hence, the result is satisfied.
+\end{solution}
+
+\begin{exercise}{2.4.4}
+\end{exercise}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{exercise}{2.4.5}
+\end{exercise}
+
+\begin{solution}
+
+\end{solution}
 \end{document}
