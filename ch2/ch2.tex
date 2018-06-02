@@ -2,6 +2,7 @@
  
 \usepackage[margin=1in]{geometry} 
 \usepackage{amsmath,amsthm,amssymb,mathtools,bbm}
+\usepackage{enumitem}
 \usepackage{xcolor}
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -336,10 +337,183 @@ Similar to the previous exercise, we can show that if the expected degree is $d 
 \end{exercise}
 
 \begin{solution}
+Since degrees are not independent, let us define $d_i^{\prime}$ as the out-degree of the $i^{th}$ vertex of the corresponding directed graph. Since we know that degrees are always larger than out-degrees, if we can show that with high probability, there exists an $i$ such that $d_i^{\prime} = 10d$, then we are done. For this, we can assume that in the limit of a large $n$, the degree distribution (which is actually a Binomial) approximates a Poisson distribution. With this assumption, we can now use the Poisson tail bound for an exact value (2.9).
 
+\textit{Note: I have not been able to derive the exact result for this problem.}
 \end{solution}
 
 \begin{exercise}{2.4.5}
+\end{exercise}
+
+\begin{solution}
+Since the degrees approximately follow the Poisson distribution for large $n$, and given that the expected degrees are $\mathcal{O}(1)$ we have
+\begin{equation}
+\mathcal{P}\{ d_i = k \} = e^{-1}\frac{1^k}{k!} \geq \frac{e^{-1}}{k^k}, 
+\label{eqn:5}
+\end{equation}
+where the last inequality is obtained by Stirling's approximation.
+
+For the given $k$, we have
+\begin{align*}
+\log k^k &= k \log k \\
+	&= \frac{\log n}{\log \log n}(\log \log n - \log \log \log n) \\
+	&\approx \log n \annot{Since $\log \log n >> \log \log \log n$}\\
+\therefore k^k &\approx n
+\end{align*}
+
+Using this approximation in \ref{eqn:5} and taking union bound over all vertices, we see that the required probability is at least $e^{-1}$, which is sufficiently large.
+\end{solution}
+
+\begin{exercise}{2.5.1}
+\end{exercise}
+
+\begin{solution}
+We have
+\begin{align*}
+\E X^p &= \int_{-\infty}^{\infty}x^p \frac{1}{\sqrt{2\pi}}e^{-x^2/2}dx \\
+	&= \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}x^{p-1} (xe^{-x^2/2})dx \\
+	&= \frac{1}{\sqrt{2\pi}}\left[ -x^{p-1}e^{-x^2/2}|_{-\infty}^{\infty} + (p-1)\int_{-\infty}^{\infty}x^{p-2}xe^{-x^2/2}dx \right] \annot{Integration by parts} \\
+	&= \frac{p-1}{\sqrt{2\pi}} \int_{-\infty}^{\infty}x^{p-2}xe^{-x^2/2}dx \annot{Since the first term is 0} \\
+	&= (p-1)\E X^{p-2} \\
+	&= (p-1)(p-3)\ldots(3)(1) \annot{Since $\E X^0 = 1$} \\
+	&= \frac{p!}{2.4\ldots p} \\
+	&= \frac{p!}{2^{p/2}(\frac{p}{2})!} \\
+\therefore \lVert X \rVert_p = (\E X^p)^{1/p} &= \frac{1}{\sqrt{2}}\left(\frac{p!}{(p/2)!} \right)^{1/p}, \\
+\end{align*}
+and the equivalence to the desired result can be seen by using the definition $\Gamma(z) = (z-1)!$.
+
+We can further write
+\begin{align*}
+\lVert X \rVert_p = (\E X^p)^{1/p} &= \frac{1}{\sqrt{2}}\left(\frac{p!}{(p/2)!} \right)^{1/p} \\
+		&= \frac{1}{\sqrt{2}}\left(p(p-1)\ldots(\frac{p}{2}+1) \right)^{1/p} \\
+		&\leq \frac{1}{\sqrt{2}}\left(p^{p/2} \right)^{1/p} \annot{Since each term in product is less than $p$}\\
+		&= \mathcal{O}(\sqrt{p})
+\end{align*}
+as $p \rightarrow \infty$.
+
+For the moment-generating function, we have
+\begin{align*}
+\E \exp(\lambda X) &= \int_{-\infty}^{\infty}e^{\lambda x}\frac{e^{-x^2/2}}{\sqrt{2\pi}}dx \\
+	&= \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}e^{-\frac{1}{2}x^2 + \lambda x}dx \\
+	&= \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}e^{-\frac{1}{2}(x^2 - 2\lambda x + \lambda^2) + \frac{1}{2}\lambda^2}dx \annot{Adding and subtracting $\frac{1}{2}\lambda^2$} \\
+	&= \frac{e^{\lambda^2/2}}{\sqrt{2\pi}}\int_{-\infty}^{\infty}e^{-\frac{(x-\lambda)^2}{2}}dx \\
+	&= e^{\lambda^2/2}\mathcal{N}(\lambda,1) \\
+	&= e^{\lambda^2/2},
+\end{align*}
+which is the desired result.
+\end{solution}
+
+\begin{exercise}{2.5.4}
+\end{exercise}
+
+\begin{solution}
+\begin{align*}
+\E \exp(\lambda^2 X^2) &= \E \exp (\lambda X)^2 \\
+		&= \E exp \sum_{i=1}^{\lambda X}\lambda X \\
+		&= \E \prod_{i=1}^{\lambda X}\exp(\lambda X) \\
+		&\leq \E\prod_{i=1}^{\lambda X}\exp (\lambda^2) \annot{Using Property 5 with $K_5 = 1$}\\
+		&= \lambda^3 \E X \leq \exp(K^2 \lambda^2) \annot{Using Property 4}\\
+\end{align*}
+
+This inequality can only hold for all $\lambda \in \mathcal{R}$ if $\E X = 0$.
+\end{solution}
+
+
+\begin{exercise}{2.5.5}
+\end{exercise}
+
+\begin{solution}
+
+\textbf{Part 1}
+
+We can calculate the MGF of $X^2$ for $X \sim \mathcal{N}(0,1)$ as follows.
+\begin{align*}
+\E \lambda X^2 &= \int_{-\infty}^{\infty}\lambda x^2 \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}dx \\
+		&= \frac{2\lambda}{\sqrt{2\pi}}\int_{0}^{\infty}x(xe^{-\frac{x^2}{2}})dx \\
+		&= \frac{2\lambda}{\sqrt{2\pi}}\left[ -e^{-\frac{x^2}{2}}|_0^{\infty} + \int_{0}^{\infty}e^{-\frac{x^2}{2}}dx \right] \annot{Integration by parts}\\
+		&= \lambda\left( \frac{\sqrt{2}}{\pi} + 1 \right)\\
+\end{align*}
+This is a monotonously increasing function in $\lambda$, and therefore it is only finite in a bounded neighborhood of $0$.
+
+\textbf{Part 2}
+
+We have
+\begin{align*}
+& \E \exp(\lambda^2 X^2) \leq \exp(K \lambda^2) \\
+\Rightarrow & \E \left( 1 + \frac{\lambda^2X^2}{1!} + \frac{(\lambda^2X^2)^2}{2!} + \ldots  \right) \leq 1 + \frac{K\lambda^2}{1!} + \frac{(K\lambda^2)^2}{2!} + \ldots \annot{Using Taylor expansion}\\
+\therefore & \forall i \in {0,1,\ldots},~~~\lambda^{2i}\E X^{2i} \leq \lambda^{2i}(\sqrt{K})^{2i} \annot{Comparing individual terms since all terms are positive}\\
+\therefore & \E X^{2i} \leq K^i \\  
+\Rightarrow & \E ((X^2)^i)\leq K \\
+\therefore \lVert X \rVert_{\infty} \leq K
+\end{align*}
+\end{solution}
+
+\begin{exercise}{2.5.7}
+\end{exercise}
+
+\begin{solution}
+To prove that a function is a norm, it needs to satisfy the following 3 properties:
+\begin{enumerate}
+\item $p(\mathbf{u}+\mathbf{v})\leq p(\mathbf{u})+p(\mathbf{v})$
+\item $p(a\mathbf{v}) = |a|p(\mathbf{v})$
+\item If $p(\mathbf{v})=0$, then $\mathbf{v}=0$
+\end{enumerate}
+
+We will now show each of these properties for the sub-gaussian norm $\lVert \cdot \rVert_{\psi_2}$.
+
+\begin{enumerate}
+\item Let $f(x) = e^{x^2}$. We have
+\begin{align*}
+f\left( \frac{\vert X+Y \vert}{a+b} \right) &\leq f\left( \frac{\vert X \vert + \vert Y \vert}{a+b} \right) \\
+	&\leq \frac{a}{a+b}f\left( \frac{|X|}{a}\right) + \frac{b}{a+b}f\left( \frac{|Y|}{b}\right) \annot{Jensen's inequality for convex functions}\\
+\E f\left( \frac{\vert X+Y \vert}{a+b} \right) &\leq \frac{a}{a+b}\E f\left( \frac{|X|}{a}\right) + \frac{b}{a+b}\E f\left( \frac{|Y|}{b}\right) \annot{Taking $\E$ on both sides}\\
+\E f\left( \frac{\vert X+Y \vert}{\lVert X \rVert_{\psi_2}+\lVert Y \rVert_{\psi_2}} \right) &\leq \frac{a}{a+b}2 + \frac{b}{a+b}2 = 2 \annot{Taking $a= \lVert X \rVert_{\psi_2}$ and $b = \lVert Y \rVert_{\psi_2}$}\\
+\end{align*}
+
+So $\lVert X \rVert_{\psi_2} + \lVert Y \rVert_{\psi_2}$ is in the set ${t>0: \E \exp(X^2/t^2)}\leq 2$, and the proof is complete.
+
+\item We have
+\begin{align*}
+\lVert aX \rVert_{\psi_2} &= \inf{t>0: \E\exp(-(aX)^2/t^2)\leq 2} \\
+	&= \inf {au>0: \E\exp(-X^2/t^2)\leq 2} \annot{Taking $t=au$} \\
+	&= a\lVert X \rVert_{\psi_2}
+\end{align*}
+
+\item We have 
+\begin{align*}
+& \lVert X \rVert_{\psi_2} = 0 \\
+\Rightarrow & \inf{t>0: \E\exp(-X^2/t^2)\leq 2} = 0 \\
+\Rightarrow & \E\exp(-X^2/t^2)\leq 2 \\
+\Rightarrow & \exp(-\E X^2/t^2)\leq 2 \annot{By Jensen's inequality} \\
+\Rightarrow & \E X^2 \leq -t^2 \log 2 \\
+\Rightarrow & \E X^2 \leq \lim_{t\rightarrow0}-t^2 \log 2 \annot{Taking $\lim_{t\rightarrow 0}$ both sides}\\
+\Rightarrow & \E X^2 \leq 0 \\
+\therefore X = 0
+\end{align*}
+\end{enumerate}
+\end{solution}
+
+\begin{exercise}{2.5.9}
+\end{exercise}
+
+\begin{solution}
+\begin{enumerate}[label=(\roman*)]
+\item $X \sim \text{Pois}(\lambda)$. We have
+\begin{align*}
+\mathcal{P}\{ X \geq t\} &> \mathcal{P}\{ X = t\} \\
+	&= e^{-\lambda}\frac{\lambda^t}{t!} \\ 
+\end{align*}
+\end{enumerate}
+\end{solution}
+
+\begin{exercise}{2.5.10}
+\end{exercise}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{exercise}{2.5.11}
 \end{exercise}
 
 \begin{solution}
